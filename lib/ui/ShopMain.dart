@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import './details.dart';
+import './navigationDrawer.dart';
 class ShopMain extends StatefulWidget {
   const ShopMain({super.key});
 
@@ -73,7 +74,17 @@ class _ShopMainState extends State<ShopMain> {
           ),
         ),
       ),
+      drawer:NavDrawer() ,
+      appBar: AppBar(
+        title: Text(""),
+        actions: [
+          Icon(Icons.shopping_bag,size: 35,)
+
+        ],
+
+      ),
       body: SafeArea(
+
         child: SingleChildScrollView(
           child: Container(
             color: Colors.white,
@@ -81,31 +92,7 @@ class _ShopMainState extends State<ShopMain> {
             child: Column(
 
               children: [
-                Row(
-                  children: [
-                    Expanded(child: Container(
 
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-
-                        children: [
-                          Icon(Icons.menu,size: 35),
-                        ],
-                      ),
-                    )),
-                      Expanded(child: Container(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Icon(Icons.shopping_bag,size: 35,),
-                          ],
-                        ),
-                      ))
-
-                  ],
-                ),
                 SizedBox(height: 20.h,),
                 Row(
                   children: [
@@ -302,7 +289,9 @@ class _ShopMainState extends State<ShopMain> {
                   spacing: 3,
                   children: DataListCards.map((item){
                     return TextButton(
-                      onPressed: (){},
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Details()));
+                      },
                       style: TextButton.styleFrom(
                         fixedSize: Size(165.w,
                             350.h),

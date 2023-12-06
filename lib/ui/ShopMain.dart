@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import './details.dart';
 import './navigationDrawer.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:provider/provider.dart';
+import './notifier.dart';
+
+import 'package:expandable_text/expandable_text.dart';
 class ShopMain extends StatefulWidget {
   const ShopMain({super.key});
 
@@ -12,51 +18,24 @@ class ShopMain extends StatefulWidget {
 
 class _ShopMainState extends State<ShopMain> {
 
-  var DataListCards=[
-    {
-      "name":"Nike Sportswear Club Fleece",
-      "price":"99"
-    },{
-      "name":"Nike Sportswear Club Fleece",
-      "price":"99"
-    },{
-      "name":"Nike Sportswear Club Fleece",
-      "price":"99"
-    },{
-      "name":"Nike Sportswear Club Fleece",
-      "price":"99"
-    },{
-      "name":"Nike Sportswear Club Fleece",
-      "price":"99"
-    },{
-      "name":"Nike Sportswear Club Fleece",
-      "price":"99"
-    },{
-      "name":"Nike Sportswear Club Fleece",
-      "price":"99"
-    },{
-      "name":"Nike Sportswear Club Fleece",
-      "price":"99"
-    },{
-      "name":"Nike Sportswear Club Fleece",
-      "price":"99"
-    },{
-      "name":"Nike Sportswear Club Fleece",
-      "price":"99"
-    },{
-      "name":"Nike Sportswear Club Fleece",
-      "price":"99"
-    },{
-      "name":"Nike Sportswear Club Fleece",
-      "price":"99"
-    },{
-      "name":"Nike Sportswear Club Fleece",
-      "price":"99"
-    },];
+  var DataListCards=[];
+
   var ListDataBrands=["adidas","adidas","adidas","adidas","adidas","adidas","adidas","adidas","adidas",];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchData();
+  }
+  Future<void> fetchData() async {
+    final response = await http.get(Uri.parse('https://fakestoreapi.com/products'));
+    setState(() {
+      DataListCards = json.decode(response.body);
+    });
+  }
   Widget build(BuildContext context) {
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       bottomNavigationBar: BottomAppBar(
@@ -222,6 +201,7 @@ class _ShopMainState extends State<ShopMain> {
                       return TextButton(onPressed: (){},
                         child: Container(
                           width: 150,
+                          height: 200.h,
                           // Set your desired width for each item
                           margin: EdgeInsets.all(8), // Set margin as needed
                           color: Color(0xFFF5F6FA), // Set your desired background color
@@ -290,7 +270,9 @@ class _ShopMainState extends State<ShopMain> {
                   children: DataListCards.map((item){
                     return TextButton(
                       onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Details()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Details(
+                          Product: item,
+                        )));
                       },
                       style: TextButton.styleFrom(
                         fixedSize: Size(165.w,
@@ -311,7 +293,14 @@ class _ShopMainState extends State<ShopMain> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 Expanded(child: TextButton(onPressed: (){},child: Icon(Icons.favorite))),
-                                Expanded(child: TextButton(onPressed: (){},child: Icon(Icons.shopping_cart_checkout)))
+                                Expanded(child: TextButton(onPressed: (){
+                                  Provider.of<StateShopCart>(context,listen:false).addToCart(item);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text("item added to cart"),
+                                      duration: Duration(seconds: 2),),
+
+                                  );
+                                },child: Icon(Icons.shopping_cart_checkout)))
                               ],
 
                             ),
@@ -322,7 +311,7 @@ class _ShopMainState extends State<ShopMain> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(20),
 
-                                child: Image.network("https://www.apetogentleman.com/wp-content/uploads/2018/06/male-models-guinness.jpg",
+                                child: Image.network(item["image"],
                                 width: 250,
                                     height: 150,
                                     fit:BoxFit.fitHeight
@@ -334,15 +323,16 @@ class _ShopMainState extends State<ShopMain> {
                             ),
                             SizedBox(height:5.h ,),
                             Container(
+                              height: null,
 
-                              child: Row(
 
-                                children: [
-                                  Flexible(child: Text("Nike Sportswear Club Fleece",style: TextStyle(
-                                    color: Color(0xFF1D1E20)
-                                  ),))
-                                ],
-                              ),
+                              child:Text(
+                                item["title"],
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                              )
+
                             ),
                             SizedBox(height:5.h ,),
                             Container(
@@ -350,7 +340,7 @@ class _ShopMainState extends State<ShopMain> {
                               child: Row(
 
                                 children: [
-                                  Flexible(child: Text("\$99",style: TextStyle(
+                                  Flexible(child: Text(item['price'].toString(),style: TextStyle(
                                       color: Color(0xFF1D1E20)
                                   ),))
                                 ],

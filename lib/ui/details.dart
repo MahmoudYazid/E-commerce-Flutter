@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import './ShopMain.dart';
+import 'package:provider/provider.dart';
+import './notifier.dart';
+
 class Details extends StatefulWidget {
-  const Details({super.key});
+  final Product;
+  const Details({super.key,required this.Product});
 
   @override
   State<Details> createState() => _DetailsState();
@@ -14,28 +18,41 @@ class _DetailsState extends State<Details> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       bottomNavigationBar: BottomAppBar(
-
         color: Color(0xFF9775FA),
-        child: TextButton(
-          onPressed: (){},
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("Add to Cart",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w500,
-                fontSize: 17
+        child: Consumer<StateShopCart>(
+          builder: (context, cart, child) {
+            return TextButton(
+              onPressed: () {
+                cart.addToCart(widget.Product);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Item added to cart'),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Add to Cart",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 17,
+                    ),
+                  ),
+                ],
               ),
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
+
       body: SafeArea(
         
-        child: SingleChildScrollView(
+        child:SingleChildScrollView(
           child: Container(
             child: Column(
               children: [
@@ -63,7 +80,7 @@ class _DetailsState extends State<Details> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(child: Container(child: Image.network("https://www.apetogentleman.com/wp-content/uploads/2018/06/male-models-guinness.jpg")))
+                    Expanded(child: Container(child: Image.network(widget.Product['image'])))
                   ],
                 ),
                 SizedBox(height: 10.h,),
@@ -109,7 +126,7 @@ class _DetailsState extends State<Details> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Flexible(child: Text("Nike Club Fleece",
+                              Flexible(child: Text(widget.Product['title'],
                               style: TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.w600
@@ -122,7 +139,7 @@ class _DetailsState extends State<Details> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text("\$120",  style: TextStyle(
+                              Text(widget.Product['price'].toString(),  style: TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.w600
                               ))
@@ -142,7 +159,7 @@ class _DetailsState extends State<Details> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(5),
 
-                          child: Container(child: Image.network("https://www.apetogentleman.com/wp-content/uploads/2018/06/male-models-guinness.jpg",
+                          child: Container(child: Image.network(widget.Product['image'],
                                                  )),
                         ),
                       ),
@@ -151,7 +168,7 @@ class _DetailsState extends State<Details> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(5),
 
-                          child: Container(child: Image.network("https://www.apetogentleman.com/wp-content/uploads/2018/06/male-models-guinness.jpg",
+                          child: Container(child: Image.network(widget.Product['image'],
                             )),
                         ),
                       ),
@@ -161,7 +178,7 @@ class _DetailsState extends State<Details> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(5),
 
-                          child: Container(child: Image.network("https://www.apetogentleman.com/wp-content/uploads/2018/06/male-models-guinness.jpg",
+                          child: Container(child: Image.network(widget.Product['image'],
                             )),
                         ),
                       ),
@@ -170,7 +187,7 @@ class _DetailsState extends State<Details> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(5),
 
-                          child: Container(child: Image.network("https://www.apetogentleman.com/wp-content/uploads/2018/06/male-models-guinness.jpg",
+                          child: Container(child: Image.network(widget.Product['image'],
                           )),
                         ),
                       ),
@@ -387,7 +404,7 @@ class _DetailsState extends State<Details> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Flexible(child: Text("The Nike Throwback Pullover Hoodie is made from premium French terry fabric that blends a performance feel with ")),
+                              Flexible(child: Text(widget.Product['description'])),
 
                             ],
                           )),
@@ -423,7 +440,7 @@ class _DetailsState extends State<Details> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text("\$125",style: TextStyle(
+                              Text(widget.Product['price'].toString(),style: TextStyle(
                                   color: Color(0xFF8F959E)
                               ))
                             ],

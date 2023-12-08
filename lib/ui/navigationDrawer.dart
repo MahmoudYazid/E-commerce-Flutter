@@ -30,15 +30,12 @@ class _NavDrawerState extends State<NavDrawer> {
         ClipRRect(
           borderRadius: BorderRadius.circular(30),
           child: Image.network("https://t4.ftcdn.net/jpg/02/14/74/61/360_F_214746128_31JkeaP6rU0NzzzdFC4khGkmqc8noe6h.jpg",
-          width: 60.w,),
+          width: 50.w,),
         )
-                ,SizedBox(width: 5.w,),
+                ,SizedBox(width: 10.w,),
                 Column(children: [Text("Mrh Raju"),Text("Verified Profile")]),
-        SizedBox(width: 30.w,),
-                Container(
-                  color: Color(0xFFF5F5F5),
-                  child: Text("3 orders"),
-                )
+        SizedBox(width: 20.w,),
+
 
               ],),
             Row(children: [

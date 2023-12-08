@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import './notifier.dart';
+import './cart.dart';
 
 import 'package:expandable_text/expandable_text.dart';
 class ShopMain extends StatefulWidget {
@@ -57,7 +58,9 @@ class _ShopMainState extends State<ShopMain> {
       appBar: AppBar(
         title: Text(""),
         actions: [
-          Icon(Icons.shopping_bag,size: 35,)
+          IconButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>Cart()));
+          }, icon: Icon(Icons.shopping_bag,size: 35,))
 
         ],
 
@@ -200,7 +203,7 @@ class _ShopMainState extends State<ShopMain> {
                     itemBuilder: (BuildContext context, int index) {
                       return TextButton(onPressed: (){},
                         child: Container(
-                          width: 150,
+                          width: 150.w,
                           height: 200.h,
                           // Set your desired width for each item
                           margin: EdgeInsets.all(8), // Set margin as needed

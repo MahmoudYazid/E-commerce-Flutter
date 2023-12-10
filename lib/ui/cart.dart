@@ -51,7 +51,7 @@ class _CartState extends State<Cart> {
       body:Consumer<StateShopCart>(
         builder: (context,cart , child){
 
-          List cartItems = cart.shopCart;
+          List cartItems = cart.unique;
           return ListView.builder(
 
             itemCount: cartItems.length,
@@ -118,8 +118,25 @@ class _CartState extends State<Cart> {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      Container(
-                                        child: IconButton(onPressed: (){},icon: Icon(Icons.delete),),
+                                      Expanded(
+                                        child: Container(
+
+                                        child: Container(child: Text("${Provider.of<StateShopCart>(context,listen:false).GetNumber(cartItems[index])} pieces",style: TextStyle(
+
+                                          fontSize: 20
+                                        ),),)
+                                        
+                                        ),
+                                      )
+                                      ,
+                                      Expanded(
+                                        child: Container(
+                                          child: IconButton(onPressed: (){
+                                        
+                                            Provider.of<StateShopCart>(context,listen:false).DelObj(cartItems[index]);
+                                        
+                                          },icon: Icon(Icons.delete),),
+                                        ),
                                       ),
                                     ],
                                   ),

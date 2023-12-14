@@ -22,17 +22,20 @@ class StateShopCart extends ChangeNotifier {
 
   }
 
-  bool DelObj(obj) {
+  void DelObj(obj) {
     for (var i = 0; i < shopCart.length; i++) {
       if (shopCart[i]["title"] == obj["title"]) {
         shopCart.removeAt(i);
         if (GetNumber(obj)==0) {
           unique.remove(obj);
+          break;
 
         }
-        return true;
+        break;
       }
     }
-    return false;
+    notifyListeners();
+
   }
+
 }
